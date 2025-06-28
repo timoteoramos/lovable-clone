@@ -50,3 +50,5 @@ export const PROJECT_TEMPLATES = [
 ] as const;
 
 export const MAX_SEGMENTS = 4;
+
+export const SANDBOX_TIMEOUT_IN_MS = 60_000 * 10 * 3; // 30 mins

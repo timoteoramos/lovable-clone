@@ -19,6 +19,7 @@ import {
   lastAssistantTextMessageContent,
   parseAgentOutput,
 } from "./utils";
+import { SANDBOX_TIMEOUT_IN_MS } from "@/constants";
 
 interface AgentState {
   summary: string;
@@ -31,6 +32,7 @@ export const codeAgentFunction = inngest.createFunction(
   async ({ event, step }) => {
     const sandboxId = await step.run("get-sandbox-id", async () => {
       const sandbox = await Sandbox.create("lovable-clone-nextjs-sg-0206");
+      await sandbox.setTimeout(SANDBOX_TIMEOUT_IN_MS);
       return sandbox.sandboxId;
     });
 
@@ -46,6 +48,7 @@ export const codeAgentFunction = inngest.createFunction(
           orderBy: {
             createdAt: "desc",
           },
+          take: 5,
         });
 
         for (const message of messages) {
@@ -56,7 +59,7 @@ export const codeAgentFunction = inngest.createFunction(
           });
         }
 
-        return formattedMessages;
+        return formattedMessages.reverse();
       }
     );
 
