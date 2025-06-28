@@ -1,26 +1,27 @@
 import { CopyCheckIcon, CopyIcon } from "lucide-react";
-import { useState, useMemo, useCallback, Fragment } from "react";
+import { Fragment, useCallback, useMemo, useState } from "react";
+import { toast } from "sonner";
 
-import { Hint } from "./hint";
-import { Button } from "./ui/button";
+import { MAX_SEGMENTS } from "@/constants";
+import { convertFilesToTreeItems } from "@/lib/utils";
+import { FileCollection } from "@/types";
 import { CodeView } from "./code-view";
-import {
-  ResizableHandle,
-  ResizablePanelGroup,
-  ResizablePanel,
-} from "./ui/resizable";
+import { Hint } from "./hint";
+import { TreeView } from "./tree-view";
 import {
   Breadcrumb,
+  BreadcrumbEllipsis,
   BreadcrumbItem,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-  BreadcrumbEllipsis,
 } from "./ui/breadcrumb";
-import { FileCollection } from "@/types";
-import { convertFilesToTreeItems } from "@/lib/utils";
-import { TreeView } from "./tree-view";
-import { toast } from "sonner";
+import { Button } from "./ui/button";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "./ui/resizable";
 
 function getLanguageFromExtension(filename: string): string {
   const extension = filename.split(".")?.pop()?.toLowerCase();
@@ -33,10 +34,9 @@ interface FileBreadcrumbProps {
 
 const FileBreadcrumb = ({ filePath }: FileBreadcrumbProps) => {
   const pathSegments = filePath.split("/");
-  const maxSegments = 4;
 
   const renderBreadcrumItems = () => {
-    if (pathSegments.length <= maxSegments) {
+    if (pathSegments.length <= MAX_SEGMENTS) {
       // show all segments if 4 or less
       return pathSegments.map((segment, index) => {
         const isLast = index === pathSegments.length - 1;
