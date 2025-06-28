@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Fragment } from "@/generated/prisma";
 import { ExternalLinkIcon, RefreshCcwIcon } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface FragmentWebProps {
   data: Fragment;
@@ -17,11 +18,18 @@ const FragmentWeb = ({ data }: FragmentWebProps) => {
   };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(data.sandboxUrl);
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
+    navigator.clipboard
+      .writeText(data.sandboxUrl)
+      .then(() => {
+        setCopied(true);
+        toast.success("Link copied");
+        setTimeout(() => {
+          setCopied(false);
+        }, 2000);
+      })
+      .catch(() => {
+        toast.error("Something went wrong. Please try again.");
+      });
   };
 
   return (

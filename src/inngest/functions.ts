@@ -10,12 +10,13 @@ import { z } from "zod";
 
 import prisma from "@/lib/prisma";
 import { PROMPT } from "@/prompt";
+import { FileCollection } from "@/types";
 import { inngest } from "./client";
 import { getSandbox, lastAssistantTextMessageContent } from "./utils";
 
 interface AgentState {
   summary: string;
-  files: { [path: string]: string };
+  files: FileCollection;
 }
 
 export const codeAgentFunction = inngest.createFunction(
