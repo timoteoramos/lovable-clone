@@ -17,6 +17,7 @@ import { FileCollection } from "@/types";
 import { FragmentWeb } from "../components/fragment-web";
 import { MessagesContainer } from "../components/messages-container";
 import { ProjectHeader } from "../components/project-header";
+import { UserControl } from "@/components/user-control";
 
 interface ProjectViewProps {
   projectId: string;
@@ -73,6 +74,7 @@ const ProjectView = ({ projectId }: ProjectViewProps) => {
                     Upgrade
                   </Link>
                 </Button>
+                <UserControl />
               </div>
             </div>
             <TabsContent value="preview">

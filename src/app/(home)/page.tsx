@@ -1,3 +1,4 @@
+import { SignedIn } from "@clerk/nextjs";
 import Image from "next/image";
 
 import { ProjectForm } from "@/modules/home/ui/components/project-form";
@@ -28,7 +29,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      <ProjectsList />
+      <SignedIn>
+        <ProjectsList />
+      </SignedIn>
     </div>
   );
 }

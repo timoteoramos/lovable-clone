@@ -1,5 +1,6 @@
 "use client";
 
+import { useClerk } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ArrowUpIcon, Loader2Icon } from "lucide-react";
@@ -11,10 +12,10 @@ import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Form, FormField } from "@/components/ui/form";
+import { PROJECT_TEMPLATES } from "@/constants";
 import { cn } from "@/lib/utils";
 import { useTRPC } from "@/trpc/client";
 import { useRouter } from "next/navigation";
-import { PROJECT_TEMPLATES } from "@/constants";
 
 const formSchema = z.object({
   value: z
@@ -25,6 +26,7 @@ const formSchema = z.object({
 
 const ProjectForm = () => {
   const router = useRouter();
+  const clerk = useClerk();
 
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -42,6 +44,10 @@ const ProjectForm = () => {
         router.push(`/projects/${data.id}`);
       },
       onError: (error) => {
+        if (error.data?.code === "UNAUTHORIZED") {
+          clerk.openSignIn();
+        }
+
         toast.error(error.message);
       },
     })
